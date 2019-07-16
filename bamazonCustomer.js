@@ -2,62 +2,80 @@ var mysql = require("mysql");
 var inquirer = require("inquirer");
 
 var connection = mysql.createConnection({
-  host: "localhost",
+    host: "localhost",
 
-  // Your port; if not 3306
-  port: 3306,
+    // Your port; if not 3306
+    port: 3306,
 
-  // Your username
-  user: "root",
+    // Your username
+    user: "root",
 
-  // Your password
-  password: "midori14",
-  database: "bamazonDB"
+    // Your password
+    password: "midori14",
+    database: "bamazonDB"
 });
 
 
-connection.connect(function(err) {
+connection.connect(function (err) {
     if (err) throw err;
     console.log("connected as id " + connection.threadId);
     afterConnection();
     // createProduct();
-  });
-  
-  function afterConnection() {
-    connection.query("SELECT * FROM products", function(err, res) {
-      if (err) throw err;
-      console.table(res);
-      connection.end();
+});
+
+function afterConnection() {
+    connection.query("SELECT * FROM products", function (err, res) {
+        if (err) throw err;
+        console.table(res);
+
+
+        inquirer
+            .prompt([
+                // Here we create a basic text prompt.
+                {
+                    type: "input",
+                    message: "What is the ID of the product you'd like to buy?",
+                    name: "request_id"
+                },
+                // Here we give the user a list to choose from.
+                {
+                    type: "input",
+                    message: "How many would you like?",
+                    name: "request_units"
+                }
+            ])
+
+            .then(function (inquirerResponse) {
+                console.log(inquirerResponse)
+                var custReqUnit = inquirerResponse.request_units;
+                var custReqId = inquirerResponse.request_id;
+
+
+                connection.query("SELECT stock_quantity FROM products WHERE item_id=?", [custReqId], function (err, res) {
+                    if (err) throw err;
+                    var currentSQ = res[0].stock_quantity;
+                   console.log(custReqUnit)
+                   console.log(currentSQ)
+                    if (custReqUnit > currentSQ) {
+                        console.log("Insufficient Quantity!")
+                    }
+                });
+
+
+
+                //     if (custReqUnit > ) {
+                //       console.log("\nWelcome " + inquirerResponse.username);
+                //       console.log("Your " + inquirerResponse.pokemon + " is ready for battle!\n");
+                //     }
+                //     else {
+                //       console.log("\nThat's okay " + inquirerResponse.username + ", come again when you are more sure.\n");
+                //     }
+                //   });
+
+                connection.end();
+            });
     });
-  }
-
-  inquirer
-  .prompt([
-    // Here we create a basic text prompt.
-    {
-      type: "input",
-      message: "What is the ID of the product you'd like to buy?",
-      name: "item_id"
-    },
-    // Here we give the user a list to choose from.
-    {
-      type: "input",
-      message: "How many would you like?",
-      name: "item_units"
-    }
-  ])
-
-  .then(function(inquirerResponse) {
-    // If the inquirerResponse confirms, we displays the inquirerResponse's username and pokemon from the answers.
-    // if (inquirerResponse.item_units > ) {
-    //   console.log("\nWelcome " + inquirerResponse.username);
-    //   console.log("Your " + inquirerResponse.pokemon + " is ready for battle!\n");
-    // }
-    // else {
-    //   console.log("\nThat's okay " + inquirerResponse.username + ", come again when you are more sure.\n");
-    // }
-  });
-
+}
 
 
 // function createProduct() {
