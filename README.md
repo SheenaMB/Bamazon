@@ -1,15 +1,18 @@
-# Bamazon
+# Bamazon CLI
 
-Bamazon is an app that uses a MySQL Database called bamazon to track orders and update the database, much like Amazon!
+## Overview
 
-In this app, we have a table in MySQL that holds products, their names, the store names, their prices, and their stock quantities.
-
-When a client uses the Bamazon app, it will show them a table of all the products and ask which product they would like, and to identify it with the item ID. 
-
-Next, it will prompt the client to input the number of that product they'd like.
-
-Finally, if there is enough of that product left in stock, they will be shown the total price of their purchase while the database is simultaneously updated to account for the depleated stock.
+Bamazon-CLI is a node command line interface that interacts with the Bamazon SQL Database. A SQL table holds products, their names, the store names, their prices, and their stock quantities. It allows the users to view and purchase items from this inventory and then update the inventory accordingly. 
 
 
+## Customer
 
-This app requires mysql and inquirer to be installed and to run. If you'd like to work on it yourself please make sure these packages are installed as well as the standard node modules.
+The Customer View is where customers can order from Bamazon. It will ask the user which item they wish to purchase and how many they would like to buy. Next, it will check the current inventory to see if the item is in stock and place the order for the user if it is.
+
+* Customer View - Lets the user scroll through available products to select one to purchase or e) to return to the main menu;
+
+* Customer Order - Once user selects an item they will be prompted how many they would like to purchase and the app will check the current stock. If there is stock available their order will be completed.
+
+## Dependencies
+
+Bamazon requires mysql and inquirer to be installed and to run. Please make sure these packages are installed as well as the standard node modules.
